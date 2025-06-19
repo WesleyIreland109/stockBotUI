@@ -55,6 +55,13 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.dynamic-data img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
 .dynamic-data {
     margin-top: 1rem;
 }
