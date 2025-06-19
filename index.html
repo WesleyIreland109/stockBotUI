@@ -8,25 +8,61 @@
 </head>
 <body>
     <header>
-        <h1>StockBot Results</h1>
+        <img src="images/stockbot-logo.png" alt="StockBot Logo" class="logo">
+        <h1>Results</h1>
     </header>
+
     <main>
         <section id="results">
-            <!-- Data from the backend will be displayed here -->
+            <div id="static-boxes">
+                <div class="box light-blue" id="box-kotlin">
+                    <h3>Kotlin/GOlang Local App</h3>
+                    <p>This section shows the algorithmic, non-AI statistical analysis based on user input.</p>
+                    <div class="dynamic-data">
+                        <p>Currently being programmed...</p>
+                        <img src="images/stockbot-typing.png" alt="StockBot Reading" width="300">
+                    </div>
+                </div>
+    
+                <div class="box dark-orange" id="box-ai1">
+                    <h3>Tensorflow Bot 1</h3>
+                    <p>This section does what the Kotlin app does but AI.</p>
+                    <div class="dynamic-data">
+                        <p>Learning...</p>
+                        <img src="images/stockbot-reading.png" alt="StockBot Reading" width="300">
+                    </div>
+                </div>
+    
+                <div class="box dark-orange" id="box-ai2">
+                    <h3>Tensorflow Bot 2</h3>
+                    <p>This one trained on the market and reads the latest articles for suggestions.</p>
+                    <div class="dynamic-data">
+                        <p>Learning...</p>
+                        <img src="images/stockbot-reading.png" alt="StockBot Reading" width="300">                       
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
+    
     <footer>
-        <p>&copy; 2024 StockBot</p>
+        <p>&copy; 2025 StockBot</p>
     </footer>
-
+    
     <!-- Modal structure -->
     <div id="welcome-modal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2>Welcome!</h2>
-            <p>The basic StockBot results will be displayed here.</p>
+            <h2>Disclaimer</h2>
+            <p>
+                StockBot is a tool that combines traditional algorithmic logic with artificial intelligence to provide data-driven market suggestions.
+                It is not a licensed financial advisor and does not guarantee results. By using this platform, users acknowledge and accept that all 
+                financial decisions are made at their own discretion and risk. StockBot and its creators are not liable for any gains or losses incurred. 
+                This tool is intended solely for informational and educational purposes.
+            </p>
+            <button class="acknowledge-btn" onclick="closeModal()">Acknowledge</button>
         </div>
     </div>
+    
 
     <script src="app.js"></script>
 </body>

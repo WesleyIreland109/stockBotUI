@@ -13,10 +13,12 @@ body {
 }
 
 header {
-    background-color: #161b22; /* Slightly lighter dark blue */
-    color: #a9b8c2; /* Light greenish-gray text color */
-    padding: 1rem;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    text-align: left;
 }
 
 h1 {
@@ -26,27 +28,46 @@ h1 {
 
 main {
     padding: 2rem;
+    margin-bottom: 5rem; /* Ensure footer doesn’t overlap content */
 }
 
 #results {
-    background: #161b22; /* Matches header background */
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+}
+
+/* Responsive box layout */
+#static-boxes {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.box {
+    flex: 1;
+    min-width: 280px;
+    max-width: 32%;
+    border-radius: 8px;
     padding: 1rem;
+    background-color: #0d1117;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.dynamic-data {
+    margin-top: 1rem;
 }
 
 .result-item {
-    border-bottom: 1px solid #2f363d; /* Slightly darker border for each result item */
-    padding: 0.5rem 0;
-}
-
-.result-item:last-child {
-    border-bottom: none;
+    border-top: 1px solid #2f363d;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 footer {
-    background-color: #161b22; /* Matches header background */
-    color: #a9b8c2; /* Light greenish-gray text color */
+    background-color: #161b22;
+    color: #a9b8c2;
     text-align: center;
     padding: 0.5rem;
     position: fixed;
@@ -54,39 +75,73 @@ footer {
     width: 100%;
 }
 
+/* Light blue dashed border */
+.light-blue {
+    border: 2px dashed #58a6ff;
+}
+
+/* Dark orange with static dashed border */
+.dark-orange {
+    border: 2px dashed #d18616; /* Match the blue box's dashed style with orange */
+    border-radius: 8px;
+    background-color: #0d1117;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.box h3 {
+    margin-bottom: 0.5rem;
+    color: #c9d1d9;
+}
+
+.box p {
+    color: #8b949e;
+}
+
 /* Modal styles */
 .modal {
-    display: none; /* Hidden by default */
+    display: block;
     position: fixed;
-    z-index: 1000; /* Sit on top */
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.5); /* Black with opacity */
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background-color: #1f2937; /* Darker background for the modal */
+    background-color: #1f2937;
     margin: 15% auto;
     padding: 20px;
     border-radius: 5px;
     width: 80%;
     max-width: 500px;
-    color: #c9d1d9; /* Light gray text color */
+    color: #c9d1d9;
+    text-align: center;
 }
 
-.close-btn {
-    color: #c9d1d9; /* Light gray text color */
-    float: right;
-    font-size: 24px;
-    font-weight: bold;
+/* Modal Acknowledge Button */
+.acknowledge-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    background-color: #2ea043; /* GitHub green */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
     cursor: pointer;
 }
 
-.close-btn:hover {
-    color: #a9b8c2; /* Light greenish-gray on hover */
+.acknowledge-btn:hover {
+    background-color: #238636;
+}
+
+.logo {
+    height: 10rem;
+    width: auto;
 }
