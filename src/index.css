@@ -43,16 +43,19 @@ main {
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
+    align-items: stretch;
 }
 
 .box {
-    flex: 1;
+    flex: 1 1 30%;
     min-width: 280px;
     max-width: 32%;
     border-radius: 8px;
     padding: 1rem;
     background-color: #0d1117;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    flex-direction: column; /* Ensure content stacks vertically */
+    justify-content: space-between; /* Push content to top and bottom if needed */
 }
 
 .dynamic-data img {
@@ -152,3 +155,103 @@ footer {
     height: 10rem;
     width: auto;
 }
+
+#user-input-section {
+    background-color: #161b22;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+#user-input-section h2 {
+    color: #c9d1d9;
+    margin-bottom: 0.5rem;
+}
+
+.user-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.user-inputs input,
+.user-inputs button {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.user-inputs input {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+}
+
+.user-inputs button {
+    background-color: #2ea043; /* GitHub green */
+    color: #fff;
+    cursor: pointer;
+}
+
+.user-inputs button:hover {
+    background-color: #238636;
+}
+
+/* Remove number input spinners */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.user-input-section {
+    background-color: #161b22;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem auto;
+    width: 95%;
+    max-width: 800px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.user-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.user-inputs input,
+.user-inputs button {
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.user-inputs input {
+    background-color: #0d1117;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+}
+
+.user-inputs button {
+    background-color: #2ea043; /* GitHub green */
+    color: #fff;
+    cursor: pointer;
+}
+
+.user-inputs button:hover {
+    background-color: #238636;
+}
+
