@@ -12,7 +12,7 @@ function App() {
     return (
         <div className="app">
             <header>
-                <img src="/stockbot-logo.png" alt="StockBot Logo" className="logo" />
+                <img src="./images/stockbot-logo.png" alt="StockBot Logo" className="logo" />
                 <h1>StockBot Results</h1>
             </header>
             <main>
@@ -29,13 +29,13 @@ function App() {
                             title="Tensorflow Bot 1"
                             description="This section does what the Kotlin app does but AI."
                             colorClass="dark-orange"
-                            imageSrc="/stockbot-reading.png"
+                            imageSrc="./images/stockbot-reading.png"
                         />
                         <ResultBox
                             title="Tensorflow Bot 2"
                             description="This one trained on the market and reads the latest articles for suggestions."
                             colorClass="dark-orange"
-                            imageSrc="/stockbot-reading.png"
+                            imageSrc="./images/stockbot-reading.png"
                         />
                     </div>
                 </section>
