@@ -43,16 +43,16 @@ main {
 /* Responsive box layout */
 #static-boxes {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1rem;
     flex-wrap: wrap;
-    align-items: stretch;
+    align-items: flex-start;
 }
 
 .box {
-    flex: 1 1 30%;
+    flex: 0 1 auto;
     min-width: 280px;
-    max-width: 32%;
+    max-width: 400px;
     border-radius: 8px;
     padding: 1rem;
     background-color: #0d1117;
