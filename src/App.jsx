@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import UserInputSection from './components/userInputSection';
 import ResultBox from './components/ResultBox';
+import About from './components/About';
 
 function App() {
     const [kotlinData, setKotlinData] = useState(null);
     const [showDisclaimer, setShowDisclaimer] = useState(false);
     const [acknowledged, setAcknowledged] = useState(false);
+    const [activeTab, setActiveTab] = useState('home');
 
     useEffect(() => {
         // Show disclaimer on window load
@@ -20,6 +22,40 @@ function App() {
         if (acknowledged) {
             setShowDisclaimer(false);
         }
+    };
+
+    const renderContent = () => {
+        if (activeTab === 'about') {
+            return <About />;
+        }
+
+        return (
+            <>
+                <UserInputSection onDataFetched={handleDataFetched} />
+                <section id="results">
+                    <div id="static-boxes">
+                        <ResultBox
+                            title="Kotlin/GOlang Local App"
+                            description="This section shows the algorithmic, non-AI statistical analysis based on user input."
+                            data={kotlinData}
+                            colorClass="light-blue"
+                        />
+                        <ResultBox
+                            title="Tensorflow Bot 1"
+                            description="This section does what the Kotlin app does but AI."
+                            colorClass="dark-orange"
+                            imageSrc="./images/stockbot-reading.png"
+                        />
+                        <ResultBox
+                            title="Tensorflow Bot 2"
+                            description="This one trained on the market and reads the latest articles for suggestions."
+                            colorClass="dark-orange"
+                            imageSrc="./images/stockbot-reading.png"
+                        />
+                    </div>
+                </section>
+            </>
+        );
     };
 
     return (
@@ -64,30 +100,25 @@ function App() {
                 <img src="./images/stockbot-logo.png" alt="StockBot Logo" className="logo" />
                 <h1>StockBot Results</h1>
             </header>
+
+            {/* Navigation Tabs */}
+            <nav className="nav-tabs">
+                <button 
+                    className={`nav-tab ${activeTab === 'home' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('home')}
+                >
+                    Home
+                </button>
+                <button 
+                    className={`nav-tab ${activeTab === 'about' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('about')}
+                >
+                    About
+                </button>
+            </nav>
+
             <main>
-                <UserInputSection onDataFetched={handleDataFetched} />
-                <section id="results">
-                    <div id="static-boxes">
-                        <ResultBox
-                            title="Kotlin/GOlang Local App"
-                            description="This section shows the algorithmic, non-AI statistical analysis based on user input."
-                            data={kotlinData}
-                            colorClass="light-blue"
-                        />
-                        <ResultBox
-                            title="Tensorflow Bot 1"
-                            description="This section does what the Kotlin app does but AI."
-                            colorClass="dark-orange"
-                            imageSrc="./images/stockbot-reading.png"
-                        />
-                        <ResultBox
-                            title="Tensorflow Bot 2"
-                            description="This one trained on the market and reads the latest articles for suggestions."
-                            colorClass="dark-orange"
-                            imageSrc="./images/stockbot-reading.png"
-                        />
-                    </div>
-                </section>
+                {renderContent()}
             </main>
             <footer>
                 <p>&copy; 2025 StockBot</p>

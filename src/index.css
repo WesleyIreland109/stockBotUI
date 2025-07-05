@@ -215,6 +215,122 @@ footer {
     width: auto;
 }
 
+/* Navigation Tabs */
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background-color: #161b22;
+    border-bottom: 1px solid #30363d;
+    margin-bottom: 1rem;
+}
+
+.nav-tab {
+    background-color: transparent;
+    color: #8b949e;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.nav-tab:hover {
+    background-color: #21262d;
+    color: #c9d1d9;
+}
+
+.nav-tab.active {
+    color: #58a6ff;
+    border-bottom-color: #58a6ff;
+    background-color: #21262d;
+}
+
+/* About Page Styles */
+.about-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.about-content h1 {
+    color: #c9d1d9;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.about-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: #161b22;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.about-section h2 {
+    color: #58a6ff;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.about-section h3 {
+    color: #c9d1d9;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.about-section p {
+    color: #8b949e;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.tech-item {
+    padding: 1rem;
+    background-color: #0d1117;
+    border-radius: 6px;
+    border: 1px solid #30363d;
+}
+
+.how-it-works {
+    color: #8b949e;
+    line-height: 1.6;
+    padding-left: 1.5rem;
+}
+
+.how-it-works li {
+    margin-bottom: 1rem;
+}
+
+.how-it-works strong {
+    color: #c9d1d9;
+}
+
+.disclaimer-box {
+    background-color: #0d1117;
+    border: 1px solid #d18616;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.disclaimer-box p {
+    margin-bottom: 0.5rem;
+}
+
+.disclaimer-box strong {
+    color: #d18616;
+}
+
 /* User input section styles */
 #user-input-section,
 .user-input-section {
@@ -321,6 +437,40 @@ input[type=number] {
         padding: 0.5rem 1rem;
         flex-direction: column;
         gap: 0.5rem;
+    }
+
+    /* Navigation tabs mobile adjustments */
+    .nav-tabs {
+        margin-bottom: 0.5rem;
+    }
+
+    .nav-tab {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* About page mobile adjustments */
+    .about-page {
+        padding: 0 0.5rem;
+    }
+
+    .about-content h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .about-section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .about-section h2 {
+        font-size: 1.25rem;
+    }
+
+    .tech-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 
     .logo {
