@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function UserInputSection({ onDataFetched }) {
+export default function UserInputSection({ onDataFetched, onConnectionError }) {
     const [amount, setAmount] = useState('');
     const [timeframeValue, setTimeframeValue] = useState('');
     const [timeframeUnit, setTimeframeUnit] = useState('month');
@@ -51,7 +51,7 @@ export default function UserInputSection({ onDataFetched }) {
             onDataFetched(data);
         } catch (err) {
             console.error(err);
-            alert("Error fetching data");
+            onConnectionError();
         } finally {
             setLoading(false);
         }

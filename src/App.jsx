@@ -5,6 +5,7 @@ import About from './components/About';
 
 function App() {
     const [kotlinData, setKotlinData] = useState(null);
+    const [connectionError, setConnectionError] = useState(false);
     const [showDisclaimer, setShowDisclaimer] = useState(false);
     const [acknowledged, setAcknowledged] = useState(false);
     const [activeTab, setActiveTab] = useState('home');
@@ -16,6 +17,12 @@ function App() {
 
     const handleDataFetched = (data) => {
         setKotlinData(data);
+        setConnectionError(false); // Clear any previous connection errors
+    };
+
+    const handleConnectionError = () => {
+        setConnectionError(true);
+        setKotlinData(null); // Clear any existing data
     };
 
     const handleAcknowledge = () => {
@@ -31,7 +38,7 @@ function App() {
 
         return (
             <>
-                <UserInputSection onDataFetched={handleDataFetched} />
+                <UserInputSection onDataFetched={handleDataFetched} onConnectionError={handleConnectionError} />
                 <section id="results">
                     <div id="static-boxes">
                         <ResultBox
@@ -39,6 +46,7 @@ function App() {
                             description="This section shows the algorithmic, non-AI statistical analysis based on user input."
                             data={kotlinData}
                             colorClass="light-blue"
+                            connectionError={connectionError}
                         />
                         <ResultBox
                             title="Tensorflow Bot 1"
