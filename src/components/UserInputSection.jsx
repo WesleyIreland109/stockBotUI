@@ -37,6 +37,7 @@ export default function UserInputSection({ onDataFetched, onConnectionError }) {
             alert("Please enter both amount and timeframe.");
             return;
         }
+
         setLoading(true);
         try {
             const response = await fetch('http://localhost:8080/stock-data/recommend', {

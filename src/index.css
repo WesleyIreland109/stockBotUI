@@ -23,6 +23,30 @@ header {
     text-align: left;
 }
 
+/* Professional topbar */
+.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+    padding:0.5rem 2rem;
+    background: linear-gradient(90deg,#0b1220,#0f1724);
+    border-bottom:1px solid #21262d;
+    box-shadow: 0 2px 8px rgba(2,6,23,0.6);
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+}
+
 h1 {
     margin: 0;
     color: #a9b8c2; /* Light greenish-gray */
@@ -48,6 +72,31 @@ main {
     flex-wrap: wrap;
     align-items: flex-start;
 }
+
+/* Onboarding center: used to center the input section before intro is shown */
+.onboard-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+/* Intro title/description that fades in after disclaimer acceptance */
+.intro {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 360ms ease, transform 360ms ease;
+    color: #c9d1d9;
+    margin-bottom: 1rem;
+}
+.intro.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Ensure static boxes are visually present only after onboarding shown; default kept same but
+   we rely on App.jsx to not render them until ready */
 
 .box {
     flex: 0 1 auto;
@@ -209,10 +258,26 @@ footer {
     background-color: #238636;
 }
 
+/* Link styling for info links in modals */
+.info-link {
+    color: #58a6ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.info-link:hover {
+    text-decoration: underline;
+}
+
 /* Logo */
 .logo {
     height: 10rem;
     width: auto;
+}
+
+/* Smaller logo inside topbar */
+.topbar .logo{
+    height:3.5rem;
 }
 
 /* Navigation Tabs */
@@ -285,6 +350,22 @@ footer {
     color: #8b949e;
     line-height: 1.6;
     margin-bottom: 1rem;
+}
+
+/* Ensure unordered lists in about sections match body text color and are indented */
+.about-section ul {
+    color: #8b949e; /* same grey as body paragraphs */
+    padding-left: 1.5rem; /* indent so bullets don't hug the left */
+    margin-left: 0; /* avoid extra left margin from default browser styles */
+    list-style-position: outside;
+}
+
+.about-section li {
+    margin-bottom: 0.5rem;
+}
+
+.about-section li strong {
+    color: #c9d1d9; /* keep strong/emphasized text lighter */
 }
 
 .tech-grid {
