@@ -88,7 +88,7 @@ const NamingChecker = () => {
                     <select value={type} onChange={(e) => setType(e.target.value)}>
                         <option value="branch">Branch Name</option>
                         <option value="commit">Commit Message</option>
-                        <option value="function">Function Name</option>
+                        {/* <option value="function">Function Name</option> */}
                     </select>
                 </label>
             </div>
