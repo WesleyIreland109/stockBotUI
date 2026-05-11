@@ -8,9 +8,12 @@ function App() {
 
     useEffect(() => {
         const search = window.location.search;
-        if (search.startsWith('/?')) {
-            const path = search.slice(2).split('&')[0].replace(/~and~/g, '&');
-            navigate(path);
+        const encodedPathPrefix = '?/';
+        if (search.startsWith(encodedPathPrefix)) {
+            const path = search.slice(encodedPathPrefix.length).split('&')[0].replace(/~and~/g, '&');
+            if (path) {
+                navigate(path);
+            }
         }
     }, [navigate]);
 
