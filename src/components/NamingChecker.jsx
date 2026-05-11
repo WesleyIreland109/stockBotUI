@@ -32,6 +32,15 @@ const NamingChecker = () => {
         const hasStory = storyMatch !== null;
         checks.push({ condition: 'Includes story name at start (e.g., ABC-123)', passed: hasStory });
 
+        // Check description has more than one word
+        const wordCount = descriptionPart.split('-').filter(word => word.length > 0).length;
+        const multipleWords = wordCount > 1;
+        checks.push({ condition: 'Description contains more than one word', passed: multipleWords });
+
+        // Check does not end with a hyphen
+        const endsWithAlphanumeric = /[a-z0-9]$/.test(name);
+        checks.push({ condition: 'Does not end with a hyphen', passed: endsWithAlphanumeric });
+
         return checks;
     };
 
@@ -44,6 +53,11 @@ const NamingChecker = () => {
         // No special characters, only alphanumeric, spaces, hyphens
         const hasOnlyAllowedChars = /^[a-zA-Z0-9\s\-]+$/.test(name);
         checks.push({ condition: 'No special characters (only letters, numbers, spaces, hyphens)', passed: hasOnlyAllowedChars });
+
+        // Has at least one word after story name
+        const messageMatch = name.match(/^([A-Z]+-\d+)\s+(.+)$/);
+        const hasMessage = messageMatch !== null && messageMatch[2].trim().length > 0;
+        checks.push({ condition: 'Has at least one word after the story name', passed: hasMessage });
 
         return checks;
     };
