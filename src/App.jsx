@@ -1,32 +1,45 @@
 import { useState, useEffect } from 'react';
-import UserInputSection from './components/userInputSection';
-import ResultBox from './components/ResultBox';
 import About from './components/About';
+import Example from './components/Example';
+import MarketMetrics from './components/MarketMetrics';
+
+const tabs = {
+    '/': 'home',
+    '/example': 'example',
+    '/about': 'about',
+    '/metrics': 'metrics',
+};
 
 function App() {
-    const [kotlinData, setKotlinData] = useState(null);
-    const [connectionError, setConnectionError] = useState(false);
     const [showDisclaimer, setShowDisclaimer] = useState(false);
     const [acknowledged, setAcknowledged] = useState(false);
-    const [activeTab, setActiveTab] = useState('home');
+    const [activeTab, setActiveTab] = useState(tabs[window.location.pathname] || 'home');
+    const embedTarget = new URLSearchParams(window.location.search).get('embed');
+    const isEmbedView = activeTab === 'metrics' && embedTarget;
 
     useEffect(() => {
-        // Show disclaimer on window load
-        setShowDisclaimer(true);
+        const accepted = sessionStorage.getItem('stockbotDisclaimerAccepted') === 'true';
+        setAcknowledged(accepted);
+        setShowDisclaimer(!accepted && !isEmbedView);
+    }, [isEmbedView]);
+
+    useEffect(() => {
+        const handlePopState = () => {
+            setActiveTab(tabs[window.location.pathname] || 'home');
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
     }, []);
 
-    const handleDataFetched = (data) => {
-        setKotlinData(data);
-        setConnectionError(false); // Clear any previous connection errors
-    };
-
-    const handleConnectionError = () => {
-        setConnectionError(true);
-        setKotlinData(null); // Clear any existing data
+    const navigateTo = (tab, path) => {
+        window.history.pushState({}, '', path);
+        setActiveTab(tab);
     };
 
     const handleAcknowledge = () => {
         if (acknowledged) {
+            sessionStorage.setItem('stockbotDisclaimerAccepted', 'true');
             setShowDisclaimer(false);
         }
     };
@@ -36,35 +49,49 @@ function App() {
             return <About />;
         }
 
+        if (activeTab === 'example') {
+            return <Example />;
+        }
+
+        if (activeTab === 'metrics') {
+            return (
+                <div className="metrics-page">
+                    <MarketMetrics title="StockBot Metrics Endpoint" embedTarget={embedTarget} />
+                </div>
+            );
+        }
+
         return (
-            <>
-                <UserInputSection onDataFetched={handleDataFetched} onConnectionError={handleConnectionError} />
-                <section id="results">
-                    <div id="static-boxes">
-                        <ResultBox
-                            title="Kotlin/GOlang Local App"
-                            description="This section shows the algorithmic, non-AI statistical analysis based on user input."
-                            data={kotlinData}
-                            colorClass="light-blue"
-                            connectionError={connectionError}
-                        />
-                        <ResultBox
-                            title="Tensorflow Bot 1"
-                            description="This section does what the Kotlin app does but AI."
-                            colorClass="dark-orange"
-                            imageSrc="./images/stockbot-reading.png"
-                        />
-                        <ResultBox
-                            title="Tensorflow Bot 2"
-                            description="This one trained on the market and reads the latest articles for suggestions."
-                            colorClass="dark-orange"
-                            imageSrc="./images/stockbot-reading.png"
-                        />
+            <div className="home-page">
+                <section className="home-hero">
+                    <div>
+                        <span className="eyebrow">StockBot live demo</span>
+                        <h1>Market context, ready for the next recommendation.</h1>
+                        <p>
+                            StockBot now pulls live broad-market signals into a focused dashboard,
+                            keeping the original bot workflow grounded in current price action.
+                        </p>
                     </div>
+                    <img src="./images/stockbot-head.png" alt="StockBot" />
                 </section>
-            </>
+
+                <MarketMetrics variant="compact" title="Today’s Market Pulse" />
+
+                {/*
+                <UserInputSection onDataFetched={handleDataFetched} onConnectionError={handleConnectionError} />
+                <section id="results">...</section>
+                */}
+            </div>
         );
     };
+
+    if (isEmbedView) {
+        return (
+            <main className="embed-shell">
+                {renderContent()}
+            </main>
+        );
+    }
 
     return (
         <div className="app">
@@ -106,20 +133,29 @@ function App() {
 
             <header>
                 <img src="./images/stockbot-logo.png" alt="StockBot Logo" className="logo" />
-                <h1>StockBot Results</h1>
+                <div>
+                    <span className="eyebrow">StockBot</span>
+                    <h1>Market Intelligence</h1>
+                </div>
             </header>
 
             {/* Navigation Tabs */}
             <nav className="nav-tabs">
                 <button 
                     className={`nav-tab ${activeTab === 'home' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('home')}
+                    onClick={() => navigateTo('home', '/')}
                 >
                     Home
                 </button>
+                <button
+                    className={`nav-tab ${activeTab === 'example' ? 'active' : ''}`}
+                    onClick={() => navigateTo('example', '/example')}
+                >
+                    Example
+                </button>
                 <button 
                     className={`nav-tab ${activeTab === 'about' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('about')}
+                    onClick={() => navigateTo('about', '/about')}
                 >
                     About
                 </button>

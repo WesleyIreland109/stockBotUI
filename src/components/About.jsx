@@ -1,10 +1,12 @@
 import React from 'react';
+import MarketMetrics from './MarketMetrics';
 
 export default function About() {
     return (
         <div className="about-page">
             <div className="about-content">
                 <h1>About StockBot</h1>
+                <MarketMetrics variant="compact" title="Market Data StockBot Watches" />
                 
                 <section className="about-section">
                     <h2>What is StockBot?</h2>
