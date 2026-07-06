@@ -1,69 +1,90 @@
 import React from 'react';
+import MarketMetrics from './MarketMetrics';
 
 export default function About() {
     return (
         <div className="about-page">
             <div className="about-content">
                 <h1>About StockBot</h1>
+                <MarketMetrics variant="compact" title="Market Data StockBot Watches" />
+                
                 <section className="about-section">
                     <h2>What is StockBot?</h2>
                     <p>
-                        StockBot is a data-driven investing platform designed to help everyday investors make
-                        statistically informed stock investment decisions. The product emphasizes transparency,
-                        education, and statistical reasoning rather than opaque bullish/bearish signals.
+                        StockBot is an advanced investment analysis tool that combines traditional algorithmic logic 
+                        with cutting-edge artificial intelligence to provide data-driven market suggestions. Our platform 
+                        leverages multiple AI models and statistical analysis to help users make informed investment decisions.
                     </p>
                 </section>
 
                 <section className="about-section">
-                    <h2>Project Goals & Differentiators</h2>
-                    <ul>
-                        <li>Provide statistically informed investment suggestions based on user parameters.</li>
-                        <li>Be transparent about how recommendations are derived and provide educational context.</li>
-                        <li>Automate market data collection, storage, and analysis for reliable, repeatable results.</li>
-                        <li>Offer customizable inputs (investment amount, timeframe, risk) instead of one-size-fits-all advice.</li>
-                    </ul>
+                    <h2>Our Technology</h2>
+                    <div className="tech-grid">
+                        <div className="tech-item">
+                            <h3>Algorithmic Analysis</h3>
+                            <p>
+                                Our Kotlin/GoLang backend performs traditional statistical analysis using proven 
+                                financial algorithms and market indicators to provide reliable baseline assessments.
+                            </p>
+                        </div>
+                        <div className="tech-item">
+                            <h3>AI-Powered Insights</h3>
+                            <p>
+                                TensorFlow models trained on extensive market data provide AI-driven predictions 
+                                and pattern recognition for enhanced decision-making capabilities.
+                            </p>
+                        </div>
+                        <div className="tech-item">
+                            <h3>Real-time Market Analysis</h3>
+                            <p>
+                                Our system continuously monitors market conditions and news articles to provide 
+                                up-to-date investment recommendations based on current market trends.
+                            </p>
+                        </div>
+                    </div>
                 </section>
 
                 <section className="about-section">
-                    <h2>Current Status</h2>
-                    <p>
-                        StockBot is early-stage and partially implemented. The frontend (this UI) is functional
-                        and deployed. Backend ingestion, storage, and analysis engines are under active
-                        development. The project's repositories are split into the frontend (`StockBotUI`),
-                        a market data ingestion service (`StockBot`), and the analysis engine (`StockBotLogic`).
-                    </p>
-                </section>
-
-                <section className="about-section">
-                    <h2>Repositories</h2>
-                    <ul>
-                        <li><strong>StockBotUI</strong> — Frontend (React + Vite): user input, results display, and example outputs.</li>
-                        <li><strong>StockBot</strong> — Market data ingestion service (pulls data from providers like Polygon).</li>
-                        <li><strong>StockBotLogic</strong> — Analysis and decision engine that processes stored market data.</li>
-                    </ul>
+                    <h2>How It Works</h2>
+                    <ol className="how-it-works">
+                        <li>
+                            <strong>Input Parameters:</strong> Enter your investment amount and desired timeframe
+                        </li>
+                        <li>
+                            <strong>Multi-Model Analysis:</strong> Our system runs your parameters through multiple 
+                            analysis engines simultaneously
+                        </li>
+                        <li>
+                            <strong>Comprehensive Results:</strong> Receive detailed insights from both algorithmic 
+                            and AI-powered analysis
+                        </li>
+                        <li>
+                            <strong>Informed Decisions:</strong> Use the combined insights to make better investment decisions
+                        </li>
+                    </ol>
                 </section>
 
                 <section className="about-section">
                     <h2>Important Disclaimer</h2>
                     <div className="disclaimer-box">
                         <p>
-                            <strong>StockBot is not a licensed financial advisor.</strong> All analysis and suggestions
-                            provided are for informational and educational purposes only. Investment decisions carry
-                            inherent risks; past performance does not guarantee future results.
+                            <strong>StockBot is not a licensed financial advisor.</strong> All analysis and suggestions 
+                            provided are for informational and educational purposes only. Investment decisions carry inherent 
+                            risks, and past performance does not guarantee future results.
+                        </p>
+                        <p>
+                            Users are responsible for conducting their own research and consulting with qualified 
+                            financial professionals before making any investment decisions. StockBot and its creators 
+                            are not liable for any financial losses or gains incurred through the use of this platform.
                         </p>
                     </div>
                 </section>
 
                 <section className="about-section">
-                    <h2>Author & Source</h2>
+                    <h2>Contact & Support</h2>
                     <p>
-                        StockBot is authored and maintained by Wesley Ireland. For more information, source code,
-                        and related repositories, visit the StockBot organization on GitHub and the author's GitHub:
-                    </p>
-                    <p>
-                        <a className="info-link" href="https://github.com/StockBotApp" target="_blank" rel="noreferrer">StockBot organization</a>
-                        {' '}•{' '}
-                        <a className="info-link" href="https://github.com/WesleyIreland109" target="_blank" rel="noreferrer">Wesley Ireland (author)</a>
+                        For questions, feedback, or support, please reach out to our team. We're committed to 
+                        continuously improving StockBot to provide the best possible investment analysis tools.
                     </p>
                 </section>
             </div>

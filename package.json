@@ -3,18 +3,24 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://wesleyireland109.github.io/stockBotUI",
+  "homepage": "https://stockbotapp.com",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "api": "node server.js",
+    "dev:full": "concurrently \"npm run api\" \"npm run dev\"",
+    "build": "vite build && cp dist/index.html dist/404.html",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "concurrently": "^10.0.3",
+    "express": "^5.2.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.15.0"
+    "react-grid-layout": "^2.2.3",
+    "recharts": "^3.9.2",
+    "yahoo-finance2": "^3.15.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

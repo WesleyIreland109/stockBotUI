@@ -1,10 +1,4 @@
-import { useState } from 'react';
-
-export default function ResultBox({ title, description, data, colorClass, imageSrc, connectionError, onOpenExample }) {
-    const [showServerPopup, setShowServerPopup] = useState(true);
-
-    const closePopup = () => setShowServerPopup(false);
-
+export default function ResultBox({ title, description, data, colorClass, imageSrc, connectionError }) {
     return (
         <div className={`box ${colorClass}`}>
             <h3>{title}</h3>
@@ -12,35 +6,9 @@ export default function ResultBox({ title, description, data, colorClass, imageS
             <div className="dynamic-data">
                 {connectionError ? (
                     <>
-                        {showServerPopup && (
-                            <div className="modal">
-                                <div className="modal-content server-modal">
-                                    <h2>Servers Are Expensive</h2>
-                                    <div className="server-text">
-                                        <p>
-                                            StockBot is still in its beginning phases. Due to the cost of the API used to pull the stock data and the cost of storing the data, the full algorithmic results are not available for the public just yet.
-                                        </p>
-                                        <p>
-                                            <a
-                                                className="info-link"
-                                                href="#example"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    if (typeof onOpenExample === 'function') onOpenExample();
-                                                    closePopup();
-                                                }}
-                                            >
-                                                Click this link here
-                                            </a>{' '}
-                                            to see an example for desired results
-                                        </p>
-                                    </div>
-                                    <div className="modal-actions">
-                                        <button className="acknowledge-btn" onClick={closePopup}>Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        <p style={{ color: '#d32f2f', fontWeight: 'bold', marginBottom: '10px' }}>
+                            Error connecting to backend - this is an error on our end
+                        </p>
                         <img src="./images/stockbot-unplugged.png" alt="StockBot Unplugged" width="300" />
                     </>
                 ) : data ? (
