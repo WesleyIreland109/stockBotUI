@@ -83,8 +83,13 @@ export default function About() {
                 <section className="about-section">
                     <h2>Contact & Support</h2>
                     <p>
-                        For questions, feedback, or support, please reach out to our team. We're committed to 
-                        continuously improving StockBot to provide the best possible investment analysis tools.
+                        For questions, feedback, or support, connect with the project maintainer on GitHub.
+                        StockBot is continuously improving to provide better investment analysis tools.
+                    </p>
+                    <p>
+                        <a className="profile-link" href="https://github.com/WesleyIreland109" target="_blank" rel="noreferrer">
+                            View Wesley Ireland on GitHub
+                        </a>
                     </p>
                 </section>
             </div>

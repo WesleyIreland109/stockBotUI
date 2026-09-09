@@ -165,7 +165,7 @@ function App() {
                 {renderContent()}
             </main>
             <footer>
-                <p>&copy; 2025 StockBot</p>
+                <p>&copy; 2026 StockBot</p>
             </footer>
         </div>
     );

@@ -381,6 +381,22 @@ footer {
     color: #d18616;
 }
 
+.profile-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.85rem;
+    color: #0d1117;
+    background: #7ee787;
+    border-radius: 999px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.profile-link:hover {
+    background: #9effa8;
+}
+
 /* Metrics panels */
 .metrics-page,
 .example-page {
