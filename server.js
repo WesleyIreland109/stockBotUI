@@ -1,11 +1,24 @@
 import express from 'express';
 import YahooFinance from 'yahoo-finance2';
+import { resolve } from 'node:path';
+import { createPaperReader } from './paper.js';
 
 const app = express();
 const port = process.env.PORT || 5174;
 const symbols = ['SPY', 'QQQ', 'DIA', 'IWM', '^VIX'];
 const cacheTtlMs = 1000 * 60 * 5;
 const yahooFinance = new YahooFinance();
+const readPaper = createPaperReader();
+
+app.get('/api/paper', async (_req, res) => {
+    res.set('Cache-Control', 'no-store');
+    try {
+        res.json(await readPaper());
+    } catch (error) {
+        const expected = /^(Paper |Alpaca |Unexpected response)/.test(error.message);
+        res.status(503).json({ error: expected ? error.message : 'Unable to reach Alpaca. Check the VM network and try again.' });
+    }
+});
 
 let cachedMetrics = null;
 let cachedAt = 0;
@@ -90,6 +103,10 @@ app.get('/health', (_req, res) => {
     res.json({ ok: true });
 });
 
-app.listen(port, () => {
+app.use('/api', (_req, res) => res.status(404).json({ error: 'Unknown endpoint' }));
+app.use(express.static(resolve('dist')));
+app.get('/{*path}', (_req, res) => res.sendFile(resolve('dist/index.html')));
+
+app.listen(port, process.env.HOST || '127.0.0.1', () => {
     console.log(`StockBot metrics API listening on http://localhost:${port}`);
 });

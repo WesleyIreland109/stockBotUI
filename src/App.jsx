@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import About from './components/About';
 import Example from './components/Example';
 import MarketMetrics from './components/MarketMetrics';
+import PaperAccount from './components/PaperAccount';
 
 const tabs = {
     '/': 'home',
     '/example': 'example',
     '/about': 'about',
     '/metrics': 'metrics',
+    '/paper': 'paper',
 };
 
 function App() {
@@ -16,12 +18,13 @@ function App() {
     const [activeTab, setActiveTab] = useState(tabs[window.location.pathname] || 'home');
     const embedTarget = new URLSearchParams(window.location.search).get('embed');
     const isEmbedView = activeTab === 'metrics' && embedTarget;
+    const isPaperView = activeTab === 'paper';
 
     useEffect(() => {
         const accepted = sessionStorage.getItem('stockbotDisclaimerAccepted') === 'true';
         setAcknowledged(accepted);
-        setShowDisclaimer(!accepted && !isEmbedView);
-    }, [isEmbedView]);
+        setShowDisclaimer(!accepted && !isEmbedView && !isPaperView);
+    }, [isEmbedView, isPaperView]);
 
     useEffect(() => {
         const handlePopState = () => {
@@ -45,6 +48,7 @@ function App() {
     };
 
     const renderContent = () => {
+        if (activeTab === 'paper') return <PaperAccount />;
         if (activeTab === 'about') {
             return <About />;
         }

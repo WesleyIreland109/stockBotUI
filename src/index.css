@@ -1,4 +1,20 @@
 /* Basic reset for margins and paddings */
+.paper-account { max-width: 1200px; margin: 0 auto; }
+.paper-heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; }
+.paper-heading h2 { font-size: 26px; }
+.paper-heading > span { color: #efc46c; }
+.paper-meta { color: #a9b8c2; margin: 16px 0; }
+.paper-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid #343e46; margin: 24px 0; }
+.paper-stats > div { padding: 20px 12px; min-width: 0; }
+.paper-stats dt { font-size: 13px; color: #a9b8c2; }
+.paper-stats dd { font-size: 23px; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.paper-account h3 { margin-top: 28px; }
+.paper-error { border-left: 3px solid #f08080; padding: 12px; margin-top: 16px; color: #ffb5b5; }
+.paper-empty { padding: 24px 0; color: #a9b8c2; }
+.paper-table { overflow-x: auto; margin-top: 12px; }
+.paper-table table { border-collapse: collapse; width: 100%; text-align: left; font-size: 14px; }
+.paper-table th, .paper-table td { padding: 12px; border-bottom: 1px solid #343e46; white-space: nowrap; }
+@media (max-width: 700px) { .paper-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 * {
     margin: 0;
     padding: 0;
