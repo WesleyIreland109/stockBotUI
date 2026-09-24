@@ -7,6 +7,12 @@ import { createBroker } from './engine/broker.js';
 import { Engine } from './engine/runner.js';
 
 const app = express();
+const publicOrigins = new Set(['https://stockbotapp.com', 'https://www.stockbotapp.com']);
+app.use('/api', (req, res, next) => {
+    res.vary('Origin');
+    if (publicOrigins.has(req.headers.origin)) res.set('Access-Control-Allow-Origin', req.headers.origin);
+    next();
+});
 const port = process.env.PORT || 5174;
 const symbols = ['SPY', 'QQQ', 'DIA', 'IWM', '^VIX'];
 const cacheTtlMs = 1000 * 60 * 5;

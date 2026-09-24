@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { apiUrl } from '../api.js';
 import { Responsive, WidthProvider } from 'react-grid-layout/legacy';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -161,7 +162,7 @@ export default function MarketMetrics({ variant = 'full', title = 'Live Market M
     useEffect(() => {
         let active = true;
 
-        fetch('/api/metrics')
+        fetch(apiUrl('/api/metrics'))
             .then((response) => {
                 if (!response.ok) throw new Error('Metrics API unavailable');
                 return response.json();

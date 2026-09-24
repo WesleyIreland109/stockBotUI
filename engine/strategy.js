@@ -1,6 +1,6 @@
 import indicators from 'technicalindicators';
 
-export const SETTINGS = Object.freeze({ symbols: ['SPY', 'QQQ'], maxPosition: 1000, allocation: 0.10, risk: 0.0025, dailyLoss: 0.01, maxEntries: 6, stop: 0.01, target: 0.02 });
+export const SETTINGS = Object.freeze({ symbols: Object.freeze(['SPYM', 'SCHG']), maxPosition: 1000, allocation: 0.10, risk: 0.0025, dailyLoss: 0.01, maxEntries: 6, stop: 0.01, target: 0.02 });
 export const terminal = status => ['filled', 'canceled', 'expired', 'rejected', 'replaced'].includes(status);
 
 export function marketDate(time) {

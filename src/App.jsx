@@ -145,6 +145,12 @@ function App() {
 
             {/* Navigation Tabs */}
             <nav className="nav-tabs">
+                <button
+                    className={`nav-tab ${activeTab === 'paper' ? 'active' : ''}`}
+                    onClick={() => navigateTo('paper', '/paper')}
+                >
+                    Paper Trading
+                </button>
                 <button 
                     className={`nav-tab ${activeTab === 'home' ? 'active' : ''}`}
                     onClick={() => navigateTo('home', '/')}

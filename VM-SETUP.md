@@ -29,7 +29,10 @@ Recreate the container after changing .env; restart alone does not reload it.
 
 ## Strategy and limits
 
-- SPY and QQQ, whole shares, long-only, one position at a time.
+- SPYM (S&P 500) and SCHG (U.S. large-cap growth), whole shares, long-only,
+  one position at a time. These lower-share-price ETFs allow a $1,000 paper
+  account to trade without increasing allocation limits or removing bracket
+  protection. SCHG is not a Nasdaq-100 tracker.
 - Free IEX feed, which covers one exchange rather than the consolidated market.
 - Technical Indicators computes a 5-period SMA crossing above a 20-period SMA.
   Only complete, consecutive five-minute regular-session bars count. It needs
@@ -39,6 +42,11 @@ Recreate the container after changing .env; restart alone does not reload it.
 - Each position is capped at $1,000, 10% equity, available cash, and planned stop
   risk of 0.25% equity. No borrowing. Quotes older than 30 seconds or spreads
   greater than 0.2% are skipped. Stop orders do not guarantee a maximum loss.
+- At $1,000 equity the position budget is $100 and the daily loss threshold is
+  $10. A $35 ask allows two shares; an $85 ask allows one. Actual quotes and
+  cash determine sizing; no trade is forced if data or a signal is missing.
+  Use an empty account when upgrading from the old SPY/QQQ strategy. Existing
+  holdings in those symbols will trigger the account-mismatch guard.
 - Maximum six entry attempts per New York calendar day, including rejections.
 - A 1% equity decline from prior close triggers liquidation and a halt for that day.
   This uses account equity, not realized strategy P&L; transfers affect it.
@@ -89,9 +97,23 @@ a tax ledger. Health checks cover HTTP uptime; engine errors appear separately.
 
 Paper results have no login, per your preference. Credentials and account IDs are
 excluded from responses. Pause/resume/flatten require access to the VM console.
-Connecting stockbotapp.com still requires routing to this VM through a proxy/tunnel
-and either frontend API configuration or moving the frontend hosting. GitHub Pages
-cannot run the engine. This update does not change DNS or expose the VM publicly.
+The frontend stays on GitHub Pages; the engine stays on this VM. A public HTTPS
+proxy/tunnel must route to the StockBot container, never to Proxmox or Docker.
+The API permits browser reads from stockbotapp.com and www.stockbotapp.com.
+Once that stable HTTPS origin exists, deploy the frontend from your development
+machine with the origin (not an API key):
+
+```bash
+VITE_API_BASE_URL=https://YOUR-API-HOST npm run deploy
+```
+
+The deploy command explicitly targets WesleyIreland109/stockBotUI, not the legacy
+organization repository. With no VITE_API_BASE_URL, the frontend uses same-origin
+API routes, appropriate for the VM but not GitHub Pages. Do not use a private LAN
+address for the public build. No broker credentials belong in VITE variables.
+A temporary tunnel is demo-only: changing its address requires redeploying the
+frontend. GitHub Pages cannot run the engine. These code changes alone do not
+change DNS or expose the VM publicly.
 Revisit access controls before any future live-money version.
 
 ## Verification

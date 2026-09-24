@@ -1,3 +1,5 @@
+import { SETTINGS } from './strategy.js';
+
 const PAPER = 'https://paper-api.alpaca.markets/v2';
 const DATA = 'https://data.alpaca.markets/v2';
 
@@ -37,7 +39,7 @@ export function createBroker(env = process.env, request = fetch) {
         cancel: id => call(PAPER, `orders/${encodeURIComponent(id)}`, 'DELETE'),
         bars: async (date, now) => {
             // Start at UTC midnight; strategy filters regular-session bars in New York time.
-            const query = new URLSearchParams({ symbols: 'SPY,QQQ', timeframe: '5Min', start: `${date}T00:00:00Z`, end: now.toISOString(), feed: 'iex', adjustment: 'raw', limit: '1000', sort: 'asc' });
+            const query = new URLSearchParams({ symbols: SETTINGS.symbols.join(','), timeframe: '5Min', start: `${date}T00:00:00Z`, end: now.toISOString(), feed: 'iex', adjustment: 'raw', limit: '1000', sort: 'asc' });
             const data = await call(DATA, `stocks/bars?${query}`);
             if (data.next_page_token) throw new Error('Incomplete market data; entries paused.');
             return data.bars || {};
