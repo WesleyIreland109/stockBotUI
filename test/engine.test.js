@@ -129,6 +129,42 @@ test('closed market and pause never open positions', async t => {
     store.set('control', 'run'); broker.clock = async () => ({ is_open: false, timestamp: state.now.toISOString() });
     await engine.tick(); assert.equal(state.submitted.length, 0); assert.equal(store.snapshot().state, 'closed');
 });
+
+test('standalone bracket exits remain owned after parent fills and close before end of session', async t => {
+    const { engine, store, state, broker } = fixture(t);
+    await engine.tick();
+    const buy = state.orders[0];
+    buy.status = 'filled'; buy.filled_qty = buy.qty; buy.filled_avg_price = '105';
+    const stop = { id: 'broker-stop', client_order_id: 'generated-stop', symbol: buy.symbol, side: 'sell', qty: buy.qty, filled_qty: '0', status: 'new' };
+    const target = { ...stop, id: 'broker-target', client_order_id: 'generated-target' };
+    buy.legs = [target, stop];
+    state.positions = [{ symbol: buy.symbol, qty: buy.qty }];
+    state.orders = [{ ...target, legs: [stop] }];
+    await engine.tick();
+    assert.equal(store.snapshot().state, 'holding');
+    state.now = new Date('2026-09-23T19:51:00Z');
+    broker.cancel = async id => {
+        state.canceled.push(id);
+        buy.legs.find(leg => leg.id === id).status = 'canceled';
+        state.orders = [];
+    };
+    await engine.tick();
+    assert.deepEqual(state.canceled.sort(), ['broker-stop', 'broker-target']);
+    assert.equal(state.submitted.length, 1);
+    await engine.tick();
+    assert.equal(state.submitted.length, 2);
+    assert.equal(state.submitted[1].side, 'sell');
+});
+
+test('unrecognized manual exit order still blocks trading after a bot entry', async t => {
+    const { engine, store, state } = fixture(t);
+    await engine.tick();
+    state.orders.push({ id: 'manual', client_order_id: 'manual', symbol: 'SPYM', side: 'sell', status: 'new' });
+    await engine.tick();
+    assert.equal(store.snapshot().state, 'attention');
+    assert.equal(state.canceled.length, 0);
+    assert.equal(state.submitted.length, 1);
+});
 test('exclusive lease prevents concurrent engines from sending two entries', async t => {
     const { engine, store, broker, state } = fixture(t);
     const other = new Engine({ store, broker, enabled: true, now: () => state.now });

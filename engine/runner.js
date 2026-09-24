@@ -95,9 +95,14 @@ export class Engine {
         this.store.sample(now, Number(account.equity));
         const intents = this.store.intents();
         const ownedIds = new Set(intents.map(i => i.client_id));
-        const ownRoots = nestedOrders.filter(o => ownedIds.has(o.client_order_id));
+        // Filled bracket parents disappear from open orders; their exit legs can
+        // become roots with broker-generated client IDs. Reconciliation records
+        // those exact IDs before we decide whether an order belongs to this bot.
+        const ownedOrderIds = new Set(this.store.orderIds());
+        const isOwned = o => ownedIds.has(o.client_order_id) || ownedOrderIds.has(o.id);
+        const ownRoots = nestedOrders.filter(isOwned);
         const ownOrders = flattenOrders(ownRoots).filter(o => !terminal(o.status));
-        const foreignOrders = nestedOrders.some(o => !ownedIds.has(o.client_order_id));
+        const foreignOrders = orders.some(o => !isOwned(o));
         const mismatch = positions.some(p => !SETTINGS.symbols.includes(p.symbol)) || SETTINGS.symbols.some(symbol =>
             Math.abs(Number(positions.find(p => p.symbol === symbol)?.qty || 0) - this.store.ownedQuantity(symbol)) > 0.000001);
         if (unresolved) { this.status('attention', 'An order submission is unconfirmed. Entries paused; reconciling with Alpaca without resubmitting.'); return; }

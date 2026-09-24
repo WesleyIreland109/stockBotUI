@@ -31,6 +31,7 @@ export class Store {
             .run(body.client_order_id, date, kind, body.symbol, JSON.stringify(body)).changes > 0;
     }
     intents() { return this.db.prepare('SELECT * FROM intents').all(); }
+    orderIds() { return this.db.prepare('SELECT id FROM orders').all().map(row => row.id); }
     resolve(id) { this.db.prepare('UPDATE intents SET resolved=1 WHERE client_id=?').run(id); }
     count(date) { return this.db.prepare("SELECT COUNT(*) AS count FROM intents WHERE date=? AND kind='entry'").get(date).count; }
     observe(order, now) {
