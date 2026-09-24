@@ -116,6 +116,37 @@ frontend. GitHub Pages cannot run the engine. These code changes alone do not
 change DNS or expose the VM publicly.
 Revisit access controls before any future live-money version.
 
+### Permanent Cloudflare connection
+
+Keep the domain registered at Squarespace and the website on GitHub Pages.
+Cloudflare's free named tunnel requires the domain's DNS to be on Cloudflare.
+Before changing nameservers, copy and verify all existing DNS records, including
+mail and verification records. Coordinate DNSSEC migration if it is enabled.
+
+Create a remotely managed tunnel named `stockbot` in Cloudflare. Add the public
+hostname `api.stockbotapp.com`, path `^/api/(engine|paper|metrics)$`, pointing to
+HTTP service `stockbot:5174`. Keep the default unmatched-route 404. Do not add
+private network routes, Proxmox, SSH, or Docker management endpoints.
+
+Put only `TUNNEL_TOKEN=your_tunnel_token` in `~/stockbot/tunnel.env`, owned by
+your VM user with mode 600. Enter it privately on the VM, not in Git or chat.
+This credential is separate from the Alpaca keys. Then:
+
+```bash
+cd ~/stockbot/app
+sudo env STOCKBOT_BIND_IP=192.168.1.196 docker compose --profile public up -d
+```
+
+The connector has no published host ports. Both services restart automatically
+unless explicitly stopped. Never expose the Docker socket or mount the engine
+data volume into the connector. The cloudflared image is updated only when
+explicitly pulled; update it periodically during a maintenance window.
+
+After verifying the public API returns fresh JSON, publish from the development
+machine with `VITE_API_BASE_URL=https://api.stockbotapp.com npm run deploy`.
+The user-facing dashboard is https://stockbotapp.com/paper. Home internet or VM
+outages will interrupt the live dashboard and can interrupt trading management.
+
 ## Verification
 
 `npm test`, `npx eslint .`, `npm run build`.
