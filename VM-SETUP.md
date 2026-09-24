@@ -118,6 +118,25 @@ Revisit access controls before any future live-money version.
 
 ### Permanent Cloudflare connection
 
+Deployment completed on September 24, 2026. The active connector is the standalone
+Docker container `stockbot-tunnel`, created from the Cloudflare Docker command,
+attached to `app_default`, with restart policy `unless-stopped`. Its existing
+credential remains in Docker; no `tunnel.env` file is needed for that container.
+Do not start the optional Compose connector as a duplicate. The instructions below
+describe the Compose alternative for a future reinstall.
+
+Public dashboard: https://stockbotapp.com/paper. Public API origin:
+https://api.stockbotapp.com. `npm run deploy` builds against that API and publishes
+to the personal GitHub repository. The root and www DNS records remain DNS-only
+and point directly to GitHub Pages. Cloudflare manages DNS while Squarespace
+remains the registrar. The unrelated mirage-api tunnel was not changed.
+
+The first paper trade exposed a bracket-order ownership bug: Alpaca can return
+exit legs as roots after the entry fills. This was fixed and regression-tested.
+The September 24 SCHG position remained open after close; the engine will attempt
+to flatten it at the next regular-session open. Do not treat this first day as
+evidence of reliable end-of-day liquidation or profitability.
+
 Keep the domain registered at Squarespace and the website on GitHub Pages.
 Cloudflare's free named tunnel requires the domain's DNS to be on Cloudflare.
 Before changing nameservers, copy and verify all existing DNS records, including

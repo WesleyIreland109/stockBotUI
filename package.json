@@ -11,7 +11,7 @@
     "dev:full": "concurrently \"npm run api\" \"npm run dev\"",
     "build": "vite build && cp dist/index.html dist/404.html",
     "preview": "vite preview",
-    "predeploy": "npm run build",
+    "predeploy": "VITE_API_BASE_URL=https://api.stockbotapp.com npm run build",
     "deploy": "gh-pages -d dist -r https://github.com/WesleyIreland109/stockBotUI.git"
   },
   "dependencies": {

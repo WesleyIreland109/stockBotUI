@@ -11,34 +11,38 @@ export default function About() {
                 <section className="about-section">
                     <h2>What is StockBot?</h2>
                     <p>
-                        StockBot is an advanced investment analysis tool that combines traditional algorithmic logic 
-                        with cutting-edge artificial intelligence to provide data-driven market suggestions. Our platform 
-                        leverages multiple AI models and statistical analysis to help users make informed investment decisions.
+                        StockBot is Wesley Ireland's ongoing personal project. It began as an exploration of
+                        market analysis and machine learning. This temporary excursion revisits it as a
+                        self-hosted paper-trading experiment, starting with $1,000 in simulated money and
+                        making the progress visible in public.
                     </p>
                 </section>
 
                 <section className="about-section">
-                    <h2>Our Technology</h2>
+                    <h2>The Current Setup</h2>
                     <div className="tech-grid">
                         <div className="tech-item">
-                            <h3>Algorithmic Analysis</h3>
+                            <h3>A Simple Strategy</h3>
                             <p>
-                                Our Kotlin/GoLang backend performs traditional statistical analysis using proven 
-                                financial algorithms and market indicators to provide reliable baseline assessments.
+                                A Node.js engine watches five-minute SPYM and SCHG bars for a 5/20
+                                moving-average crossover. It uses whole-share, long-only paper orders
+                                with position limits, broker stop/target orders, and a daily loss halt.
                             </p>
                         </div>
                         <div className="tech-item">
-                            <h3>AI-Powered Insights</h3>
+                            <h3>Self-Hosted Execution</h3>
                             <p>
-                                TensorFlow models trained on extensive market data provide AI-driven predictions 
-                                and pattern recognition for enhanced decision-making capabilities.
+                                Docker runs the engine in an Ubuntu VM on Proxmox. SQLite records order
+                                intents and fills across restarts. Orders go only to Alpaca's paper API;
+                                the current engine has no live-money mode or TensorFlow predictions.
                             </p>
                         </div>
                         <div className="tech-item">
-                            <h3>Real-time Market Analysis</h3>
+                            <h3>Public Results</h3>
                             <p>
-                                Our system continuously monitors market conditions and news articles to provide 
-                                up-to-date investment recommendations based on current market trends.
+                                The website shows paper equity, positions, orders, and engine activity
+                                through a read-only HTTPS connection. The bot uses IEX market data;
+                                the separate market-context charts use Yahoo Finance and label fallback data.
                             </p>
                         </div>
                     </div>
@@ -48,18 +52,16 @@ export default function About() {
                     <h2>How It Works</h2>
                     <ol className="how-it-works">
                         <li>
-                            <strong>Input Parameters:</strong> Enter your investment amount and desired timeframe
+                            <strong>Start Small:</strong> Begin with $1,000 in a dedicated simulated account.
                         </li>
                         <li>
-                            <strong>Multi-Model Analysis:</strong> Our system runs your parameters through multiple 
-                            analysis engines simultaneously
+                            <strong>Wait for Evidence:</strong> Require complete session bars, a crossover, and a fresh quote before considering an entry.
                         </li>
                         <li>
-                            <strong>Comprehensive Results:</strong> Receive detailed insights from both algorithmic 
-                            and AI-powered analysis
+                            <strong>Apply Limits:</strong> Cap exposure, stop new entries near the close, and attempt to finish the day flat.
                         </li>
                         <li>
-                            <strong>Informed Decisions:</strong> Use the combined insights to make better investment decisions
+                            <strong>Learn in Public:</strong> Inspect the Paper Trading page for actual simulated results, including errors and missed exits.
                         </li>
                     </ol>
                 </section>
@@ -68,14 +70,14 @@ export default function About() {
                     <h2>Important Disclaimer</h2>
                     <div className="disclaimer-box">
                         <p>
-                            <strong>StockBot is not a licensed financial advisor.</strong> All analysis and suggestions 
-                            provided are for informational and educational purposes only. Investment decisions carry inherent 
-                            risks, and past performance does not guarantee future results.
+                            <strong>This is a software experiment, not investment advice.</strong> No real
+                            money is traded by the current engine. Paper fills do not reproduce all live
+                            execution costs or constraints, and simulated returns do not prove a profitable strategy.
                         </p>
                         <p>
-                            Users are responsible for conducting their own research and consulting with qualified 
-                            financial professionals before making any investment decisions. StockBot and its creators 
-                            are not liable for any financial losses or gains incurred through the use of this platform.
+                            Risk controls are not guarantees. Data gaps, software bugs, broker rejections,
+                            or home-server outages can prevent entries or exits. An overnight position
+                            is an exception to investigate, not an intended part of the strategy.
                         </p>
                     </div>
                 </section>
@@ -84,7 +86,7 @@ export default function About() {
                     <h2>Contact & Support</h2>
                     <p>
                         For questions, feedback, or support, connect with the project maintainer on GitHub.
-                        StockBot is continuously improving to provide better investment analysis tools.
+                        Feedback on the code, experiments, and failure cases is welcome.
                     </p>
                     <p>
                         <a className="profile-link" href="https://github.com/WesleyIreland109" target="_blank" rel="noreferrer">
