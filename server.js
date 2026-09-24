@@ -2,6 +2,9 @@ import express from 'express';
 import YahooFinance from 'yahoo-finance2';
 import { resolve } from 'node:path';
 import { createPaperReader } from './paper.js';
+import { Store } from './engine/store.js';
+import { createBroker } from './engine/broker.js';
+import { Engine } from './engine/runner.js';
 
 const app = express();
 const port = process.env.PORT || 5174;
@@ -9,11 +12,21 @@ const symbols = ['SPY', 'QQQ', 'DIA', 'IWM', '^VIX'];
 const cacheTtlMs = 1000 * 60 * 5;
 const yahooFinance = new YahooFinance();
 const readPaper = createPaperReader();
+const store = new Store(process.env.ENGINE_DB || './data/engine.sqlite');
+const engine = new Engine({ broker: createBroker(), store, enabled: process.env.PAPER_TRADING_ENABLED === 'true' });
+const tick = () => engine.tick().catch(() => console.error('Engine storage failure; trading cycle stopped.'));
+await tick();
+const engineTimer = setInterval(tick, 20000);
+
+app.get('/api/engine', (_req, res) => {
+    res.set('Cache-Control', 'no-store');
+    res.json(store.snapshot());
+});
 
 app.get('/api/paper', async (_req, res) => {
     res.set('Cache-Control', 'no-store');
     try {
-        res.json(await readPaper());
+        res.json({ ...await readPaper(), execution: engine.enabled ? 'paper' : 'disabled' });
     } catch (error) {
         const expected = /^(Paper |Alpaca |Unexpected response)/.test(error.message);
         res.status(503).json({ error: expected ? error.message : 'Unable to reach Alpaca. Check the VM network and try again.' });
@@ -107,6 +120,20 @@ app.use('/api', (_req, res) => res.status(404).json({ error: 'Unknown endpoint' 
 app.use(express.static(resolve('dist')));
 app.get('/{*path}', (_req, res) => res.sendFile(resolve('dist/index.html')));
 
-app.listen(port, process.env.HOST || '127.0.0.1', () => {
+const server = app.listen(port, process.env.HOST || '127.0.0.1', () => {
     console.log(`StockBot metrics API listening on http://localhost:${port}`);
+});
+
+for (const signal of ['SIGTERM', 'SIGINT']) process.on(signal, () => {
+    engine.stopping = true;
+    clearInterval(engineTimer);
+    server.close();
+    const waitForCycle = setInterval(() => {
+        if (!engine.busy) {
+            clearInterval(waitForCycle);
+            store.release(engine.owner);
+            store.close();
+            process.exit(0);
+        }
+    }, 100);
 });

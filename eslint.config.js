@@ -27,7 +27,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['server.js', 'paper.js', 'test/**/*.js'],
+    files: ['server.js', 'paper.js', 'engine/**/*.js', 'test/**/*.js'],
     languageOptions: {
       globals: globals.node,
     },

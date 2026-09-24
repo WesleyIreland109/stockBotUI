@@ -12,6 +12,8 @@ COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=build /app/dist ./dist
 COPY server.js paper.js ./
+COPY engine ./engine
+RUN mkdir /app/data && chown node:node /app/data
 USER node
 EXPOSE 5174
 CMD ["node", "server.js"]

@@ -1,5 +1,14 @@
 /* Basic reset for margins and paddings */
 .paper-account { max-width: 1200px; margin: 0 auto; }
+.paper-signals { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px; border-block: 1px solid #343e46; padding: 16px 0; }
+.paper-signals > div { display: flex; flex-direction: column; gap: 4px; }
+.paper-signals small, .paper-events time { color: #a9b8c2; }
+.paper-chart { width: 100%; min-width: 0; margin-block: 24px; }
+.paper-chart h3 { margin-bottom: 16px; }
+.paper-events { max-height: 420px; overflow-y: auto; margin-top: 12px; }
+.paper-events > div { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 10px 0; border-bottom: 1px solid #343e46; }
+.paper-events time { flex: 0 0 170px; font-size: 12px; }
+.paper-events span { flex: 1 1 230px; overflow-wrap: anywhere; }
 .paper-heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; }
 .paper-heading h2 { font-size: 26px; }
 .paper-heading > span { color: #efc46c; }

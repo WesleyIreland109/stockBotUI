@@ -1,16 +1,25 @@
 import { useEffect, useState } from 'react';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip } from 'recharts';
 
 const money = value => value == null ? '--' : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 
 export default function PaperAccount() {
     const [snapshot, setSnapshot] = useState(null);
     const [error, setError] = useState('');
+    const [engine, setEngine] = useState(null);
+    const [engineError, setEngineError] = useState('');
     useEffect(() => {
         let disposed = false;
         let timer;
         const controller = new AbortController();
         async function refresh() {
             try {
+                try {
+                    const response = await fetch('/api/engine', { signal: controller.signal });
+                    if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) throw new Error('Engine status unavailable.');
+                    const status = await response.json();
+                    if (!disposed) { setEngine(status); setEngineError(''); }
+                } catch (err) { if (!disposed) setEngineError(err.message); }
                 const response = await fetch('/api/paper', { signal: controller.signal });
                 if (!(response.headers.get('content-type') || '').includes('application/json')) throw new Error('Paper account service is unavailable on this host.');
                 const data = await response.json();
@@ -26,7 +35,14 @@ export default function PaperAccount() {
         return () => { disposed = true; clearTimeout(timer); controller.abort(); };
     }, []);
     return <section className="paper-account">
-        <div className="paper-heading"><div><span className="eyebrow">Alpaca / PAPER</span><h2>Paper account</h2></div><span>Automated trading: off</span></div>
+        <div className="paper-heading"><div><span className="eyebrow">Alpaca / PAPER</span><h2>Paper account</h2></div><span>Engine: {engineError ? 'disconnected' : engine?.state || 'connecting'}</span></div>
+        {engineError && <p role="alert" className="paper-error">{engineError}</p>}
+        {engine && <>
+            <p className="paper-meta">{engine.reason} {engine.updatedAt && <span>Last cycle: {new Date(engine.updatedAt).toLocaleString()}</span>}</p>
+            {engine.settings && <p className="paper-meta">SPY / QQQ · 5/20 SMA · 5-minute bars · IEX · Position cap {money(engine.settings.maxPosition)} · 1% stop / 2% target · Max 6 entries/day</p>}
+            {!!engine.signals?.length && <div className="paper-signals">{engine.signals.map(s => <div key={s.symbol}><strong>{s.symbol}</strong><span>{s.reason}</span>{s.fast != null && <small>SMA 5: {money(s.fast)} / SMA 20: {money(s.slow)}</small>}</div>)}</div>}
+            {engine.history?.length > 1 && <div className="paper-chart"><h3>Paper account equity</h3><ResponsiveContainer width="100%" height={230}><LineChart data={engine.history}><XAxis dataKey="time" minTickGap={60} tickFormatter={v => new Date(v).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} /><YAxis domain={['auto', 'auto']} width={85} tickFormatter={v => `$${Math.round(v).toLocaleString()}`} /><Tooltip labelFormatter={v => new Date(v).toLocaleString()} formatter={money} contentStyle={{ background: '#161b22', borderColor: '#343e46' }} /><Line dataKey="equity" name="Equity" stroke="#7ee787" dot={false} isAnimationActive={false} /></LineChart></ResponsiveContainer></div>}
+        </>}
         {error && <p role="alert" className="paper-error">{error}{snapshot && ' Displaying the last successful update.'}</p>}
         {!snapshot && !error && <p role="status">Connecting to paper account...</p>}
         {snapshot && <>
@@ -40,5 +56,6 @@ export default function PaperAccount() {
             <h3>Recent orders</h3>
             {!snapshot.orders.length ? <p className="paper-empty">No orders yet.</p> : <div className="paper-table"><table><thead><tr><th>Submitted</th><th>Symbol</th><th>Side</th><th>Filled / Qty</th><th>Fill price</th><th>Status</th></tr></thead><tbody>{snapshot.orders.map(o => <tr key={o.id}><td>{o.submittedAt ? new Date(o.submittedAt).toLocaleString() : '--'}</td><td>{o.symbol}</td><td>{o.side}</td><td>{o.filled} / {o.quantity ?? '--'}</td><td>{money(o.price)}</td><td>{o.status}</td></tr>)}</tbody></table></div>}
         </>}
+        {!!engine?.events?.length && <><h3>Engine activity</h3><div className="paper-events">{engine.events.map(event => <div key={event.id}><time>{new Date(event.time).toLocaleString()}</time><span>{event.message}</span></div>)}</div></>}
     </section>;
 }

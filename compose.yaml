@@ -4,6 +4,9 @@ services:
     restart: unless-stopped
     env_file:
       - ../.env
+    volumes:
+      - engine-data:/app/data
+    stop_grace_period: 90s
     ports:
       - "${STOCKBOT_BIND_IP:-127.0.0.1}:8080:5174"
     init: true
@@ -24,3 +27,6 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+volumes:
+  engine-data:
