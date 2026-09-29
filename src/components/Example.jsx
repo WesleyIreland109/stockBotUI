@@ -27,7 +27,7 @@ export default function Example() {
                 <div className="workflow-panel">
                     <span className="step-number">02</span>
                     <h2>Size a paper order</h2>
-                    <p>Whole-share entries stay within 10% of equity, available cash, and the risk budget. At $1,000 equity, that means at most $100 per position, with broker stop and target orders.</p>
+                    <p>The aggressive paper profile permits up to 90% of equity per position, capped at $1,000 and available cash, with a 5% stop and 10% target. At $1,000 equity, that is up to $900 of exposure. Paper Trading shows the profile actually running.</p>
                 </div>
                 <div className="workflow-panel">
                     <span className="step-number">03</span>

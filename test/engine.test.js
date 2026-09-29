@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { Store } from '../engine/store.js';
 import { Engine } from '../engine/runner.js';
 import { createBroker, BrokerError } from '../engine/broker.js';
-import { signalFor, sizeEntry, marketDate } from '../engine/strategy.js';
+import { signalFor, sizeEntry, marketDate, PROFILES, selectProfile } from '../engine/strategy.js';
 
 const time = new Date('2026-09-23T15:16:00Z');
 const bars = () => [...Array(19).fill(100), 99, 105].map((c, i) => ({ t: new Date(Date.parse('2026-09-23T13:30:00Z') + i * 300000).toISOString(), c }));
@@ -108,7 +108,25 @@ test('six persisted entry attempts prevent a seventh', async t => {
         const id = `old-${i}`;
         store.reserve({ client_order_id: id, symbol: 'SPYM' }, 'entry', '2026-09-23'); store.resolve(id);
     }
-    await engine.tick(); assert.equal(state.submitted.length, 0); assert.match(store.snapshot().reason, /six/);
+    await engine.tick(); assert.equal(state.submitted.length, 0); assert.match(store.snapshot().reason, /6 entry/);
+});
+test('aggressive paper sizing increases exposure without borrowing or bypassing quote checks', () => {
+    const profile = PROFILES['aggressive-paper'];
+    const account = { equity: '1000', cash: '1000' };
+    const q = { ap: 35, bp: 34.99, t: time.toISOString() };
+    const size = sizeEntry(q, account, time, profile);
+    assert.equal(size.qty, 25);
+    assert.ok(size.qty * size.price <= 900);
+    assert.ok(size.qty * (size.price - size.stop) <= 50);
+    assert.ok(size.qty > sizeEntry(q, account, time).qty);
+    assert.ok(sizeEntry(q, { ...account, cash: '100' }, time, profile).qty * size.price <= 100);
+    assert.ok(sizeEntry(q, { equity: '10000', cash: '10000' }, time, profile).qty * size.price <= 1000);
+    assert.equal(sizeEntry(q, account, new Date(+time + 31000), profile), null);
+    assert.equal(sizeEntry({ ...q, bp: 30 }, account, time, profile), null);
+    assert.equal(selectProfile(), PROFILES.conservative);
+    assert.equal(selectProfile('aggressive-paper'), profile);
+    assert.throws(() => selectProfile('typo'), /Unknown/);
+    assert.throws(() => selectProfile('toString'), /Unknown/);
 });
 test('early-close liquidation waits for cancellation before selling', async t => {
     const { engine, store, state, broker } = fixture(t);

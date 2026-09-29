@@ -144,7 +144,7 @@ export class Engine {
         if (control !== 'run') { this.status('paused', 'Paused from the VM console. No new entries.'); return; }
         if (minutesLeft <= 30) { this.status('waiting', 'New entries stop 30 minutes before the session closes.'); return; }
         if (account.status !== 'ACTIVE' || account.trading_blocked || account.account_blocked) { this.status('attention', 'Broker account is not enabled for trading.'); return; }
-        if (this.store.count(date) >= SETTINGS.maxEntries) { this.status('waiting', 'Daily limit of six entry attempts reached.'); return; }
+        if (this.store.count(date) >= SETTINGS.maxEntries) { this.status('waiting', `Daily limit of ${SETTINGS.maxEntries} entry attempts reached.`); return; }
         const bars = await this.broker.bars(date, now);
         const signals = SETTINGS.symbols.map(symbol => ({ symbol, ...signalFor(bars[symbol] || [], now) }));
         this.store.set('signals', signals);

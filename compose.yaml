@@ -4,6 +4,8 @@ services:
     restart: unless-stopped
     env_file:
       - ../.env
+    environment:
+      STOCKBOT_RISK_PROFILE: ${STOCKBOT_RISK_PROFILE:-aggressive-paper}
     volumes:
       - engine-data:/app/data
     stop_grace_period: 90s

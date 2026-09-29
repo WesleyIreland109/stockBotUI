@@ -31,30 +31,43 @@ Recreate the container after changing .env; restart alone does not reload it.
 
 - SPYM (S&P 500) and SCHG (U.S. large-cap growth), whole shares, long-only,
   one position at a time. These lower-share-price ETFs allow a $1,000 paper
-  account to trade without increasing allocation limits or removing bracket
+  account to trade using whole shares without removing bracket
   protection. SCHG is not a Nasdaq-100 tracker.
 - Free IEX feed, which covers one exchange rather than the consolidated market.
 - Technical Indicators computes a 5-period SMA crossing above a 20-period SMA.
   Only complete, consecutive five-minute regular-session bars count. It needs
   21 bars that day, so the first possible signal is after 11:15 ET.
-- Limit entry with a broker bracket: 1% stop and 2% target. Entry orders not fully
+- Limit entry with a broker bracket: 5% stop and 10% target in aggressive-paper mode. Entry orders not fully
   filled after a minute are canceled; partial positions are then flattened.
-- Each position is capped at $1,000, 10% equity, available cash, and planned stop
-  risk of 0.25% equity. No borrowing. Quotes older than 30 seconds or spreads
+- Each aggressive-paper position is capped at $1,000, 90% equity, available cash, and planned stop
+  risk of 5% equity. No borrowing. Quotes older than 30 seconds or spreads
   greater than 0.2% are skipped. Stop orders do not guarantee a maximum loss.
-- At $1,000 equity the position budget is $100 and the daily loss threshold is
-  $10. A $35 ask allows two shares; an $85 ask allows one. Actual quotes and
+- At $1,000 equity the aggressive position budget is $900 and the daily loss threshold is
+  $150. A $35 ask allows 25 shares; an $85 ask allows ten. Actual quotes and
   cash determine sizing; no trade is forced if data or a signal is missing.
   Use an empty account when upgrading from the old SPY/QQQ strategy. Existing
   holdings in those symbols will trigger the account-mismatch guard.
-- Maximum six entry attempts per New York calendar day, including rejections.
-- A 1% equity decline from prior close triggers liquidation and a halt for that day.
+- Maximum 12 entry attempts per New York calendar day, including rejections.
+- A 15% equity decline from prior close triggers liquidation and a halt for that day.
   This uses account equity, not realized strategy P&L; transfers affect it.
 - No entries in the last 30 minutes of the broker-reported session. Liquidation
   starts 10 minutes before close, including early-close days. Cancellation must
   be confirmed before an exit sell is submitted.
 - VM/network outages, trading halts, or rejections can prevent an exit. Leftover
   positions are flagged and the engine attempts to close them at the next open.
+
+Compose selects `aggressive-paper` by default. This is a simulated stress test,
+not a profitability improvement. The cash and $1,000 position caps still apply;
+stop and daily-loss thresholds are triggers, not guaranteed maximum losses.
+Standalone Node defaults to `conservative` (10% allocation, 0.25% planned risk,
+1% stop, 2% target, 1% daily halt, six entries). To switch Compose back, run:
+
+```bash
+STOCKBOT_RISK_PROFILE=conservative STOCKBOT_BIND_IP=192.168.1.196 sudo -E docker compose up -d stockbot
+```
+
+Profile changes affect new orders only; existing broker brackets and persisted
+daily halts are not reset. Check `/api/engine` for the active `settings.profile`.
 
 This is an experimental strategy, not a demonstrated profitable edge. It can
 legitimately make no trades. The dashboard shows signals and skipped decisions.

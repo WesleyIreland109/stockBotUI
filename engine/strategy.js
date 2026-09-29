@@ -1,6 +1,15 @@
 import indicators from 'technicalindicators';
 
-export const SETTINGS = Object.freeze({ symbols: Object.freeze(['SPYM', 'SCHG']), maxPosition: 1000, allocation: 0.10, risk: 0.0025, dailyLoss: 0.01, maxEntries: 6, stop: 0.01, target: 0.02 });
+const symbols = Object.freeze(['SPYM', 'SCHG']);
+export const PROFILES = Object.freeze({
+    conservative: Object.freeze({ profile: 'conservative', symbols, maxPosition: 1000, allocation: 0.10, risk: 0.0025, dailyLoss: 0.01, maxEntries: 6, stop: 0.01, target: 0.02 }),
+    'aggressive-paper': Object.freeze({ profile: 'aggressive-paper', symbols, maxPosition: 1000, allocation: 0.90, risk: 0.05, dailyLoss: 0.15, maxEntries: 12, stop: 0.05, target: 0.10 }),
+});
+export function selectProfile(name = 'conservative') {
+    if (!Object.hasOwn(PROFILES, name)) throw new Error('Unknown STOCKBOT_RISK_PROFILE. Use conservative or aggressive-paper.');
+    return PROFILES[name];
+}
+export const SETTINGS = selectProfile(process.env.STOCKBOT_RISK_PROFILE);
 export const terminal = status => ['filled', 'canceled', 'expired', 'rejected', 'replaced'].includes(status);
 
 export function marketDate(time) {
@@ -29,13 +38,13 @@ export function signalFor(rows, now) {
     return { buy, bar: latest.t, fast: fast.at(-1), slow: slow.at(-1), reason: buy ? '5-bar average crossed above the 20-bar average.' : 'Waiting for an upward 5/20 crossover.' };
 }
 
-export function sizeEntry(quote, account, now) {
+export function sizeEntry(quote, account, now, settings = SETTINGS) {
     if (!quote || !Number.isFinite(quote.ap) || !Number.isFinite(quote.bp) || quote.bp <= 0 || quote.ap < quote.bp || !Number.isFinite(Date.parse(quote.t)) || now - Date.parse(quote.t) > 30000 || Date.parse(quote.t) > now.getTime() + 5000) return null;
     if ((quote.ap - quote.bp) / quote.ap > 0.002) return null;
     const equity = Number(account.equity), cash = Number(account.cash);
     if (!(equity > 0 && cash > 0)) return null;
     const price = Math.ceil(quote.ap * 1.001 * 100) / 100;
-    const stop = Math.floor(price * (1 - SETTINGS.stop) * 100) / 100;
-    const qty = Math.floor(Math.min(SETTINGS.maxPosition / price, equity * SETTINGS.allocation / price, cash / price, equity * SETTINGS.risk / (price - stop)));
-    return qty >= 1 ? { qty, price, stop, target: Math.ceil(price * (1 + SETTINGS.target) * 100) / 100 } : null;
+    const stop = Math.floor(price * (1 - settings.stop) * 100) / 100;
+    const qty = Math.floor(Math.min(settings.maxPosition / price, equity * settings.allocation / price, cash / price, equity * settings.risk / (price - stop)));
+    return qty >= 1 ? { qty, price, stop, target: Math.ceil(price * (1 + settings.target) * 100) / 100 } : null;
 }
